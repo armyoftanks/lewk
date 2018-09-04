@@ -3,11 +3,10 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
+	"net/url"
 	"os"
 	"strings"
-	"time"
 )
 
 //connect twilio API
@@ -18,7 +17,7 @@ import (
 
 //************************MICROSOFT VISIO API*********************************
 
-func analyzeImage(imageUrl string) {
+/*func analyzeImage(imageUrl string) {
 	// For example, subscriptionKey = "0123456789abcdef0123456789ABCDEF"
 	const subscriptionKey = "xxx"
 
@@ -70,18 +69,50 @@ func analyzeImage(imageUrl string) {
 	// Format and display the Json result
 	jsonFormatted, _ := json.MarshalIndent(f, "", "  ")
 	fmt.Println(string(jsonFormatted))
-}
+} */
 
 //************************MICROSOFT VISIO API END*********************************
 
 //************************TWILIO MESSAGING API*********************************
 
+//TWILIO API STUFF HERE
+//test creds here
+func text(To string, Body string) {
+	accountSid := "AC0320c4b17e7ec9112a866b0b90a6c6b9"
+	authToken := "a357478fb9cc8e67b10304a1dbcab02f"
+
+	urlStr := "https://api.twilio.com/2010-04-01/Accounts/" + accountSid + "/Messages.json"
+
+	msgData := url.Values{}
+	msgData.Set("To", os.Args[1])
+	msgData.Set("From", "+19179092312")
+	msgData.Set("Body", os.Args[2])
+	msgDataReader := *strings.NewReader(msgData.Encode())
+
+	client := &http.Client{}
+
+	req, _ := http.NewRequest("POST", urlStr, &msgDataReader)
+	req.SetBasicAuth(accountSid, authToken)
+	req.Header.Add("Accept", "application/json")
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+
+	resp, _ := client.Do(req)
+	if resp.StatusCode >= 200 && resp.StatusCode < 300 {
+		var data map[string]interface{}
+		decoder := json.NewDecoder(resp.Body)
+		err := decoder.Decode(&data)
+		if err == nil {
+			fmt.Println(data["sid"])
+		}
+	} else {
+		fmt.Println(resp)
+	}
+}
+
 //************************TWILIO MESSAGING API END*********************************
 
 func main() {
-	// picture is a image url string
-	picture := os.Args[1]
 
-	analyzeImage(picture)
+	text(os.Args[1], os.Args[2])
 
 }
