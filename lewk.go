@@ -78,8 +78,8 @@ import (
 //TWILIO API STUFF HERE
 //test creds here
 func text(To string, Body string) {
-	accountSid := "AC0320c4b17e7ec9112a866b0b90a6c6b9"
-	authToken := "a357478fb9cc8e67b10304a1dbcab02f"
+	accountSid := "xxxx"
+	authToken := "xxxx"
 
 	urlStr := "https://api.twilio.com/2010-04-01/Accounts/" + accountSid + "/Messages.json"
 
