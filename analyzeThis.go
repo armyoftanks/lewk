@@ -1,13 +1,20 @@
 package main
 
 import (
-  "github.com/gorilla/websocket"
+  "fmt"
+  "log"
+  "golang.org/x/net/websocket"
 )
 
 // create twilio 2 way messenger
 // create a websocket
 // implement microsoft vision api
 // feed image data back into twilio through websocket
+
+func Dial() {
+  // do i need this?
+}
+
 
 func webSock() {
 
@@ -27,7 +34,7 @@ func webSock() {
       log.Fatal(err)
   }
   fmt.Printf("Received: %s.\n", msg[:n])
-  
+
 }
 
 func chat() {
