@@ -18,6 +18,8 @@ const (
 )
 
 func main() {
+
+
 	hook, _ := github.New(github.Options.Secret("MyGitHubSuperSecretSecrect...?"))
 
 	http.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
@@ -37,8 +39,10 @@ func main() {
 		case github.PullRequestPayload:
 			pullRequest := payload.(github.PullRequestPayload)
 			// Do whatever you want from here...
-			fmt.Printf("%+v", pullRequest)
+			fmt.Printf("%+v", pullRequest) 
 		}
 	})
 	http.ListenAndServe(":3000", nil)
+
+
 }
