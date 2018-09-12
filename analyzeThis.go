@@ -5,16 +5,13 @@ package main
 // implement microsoft vision api
 // feed image data back into twilio through webhook
 
+//WEBHOOK LISTENING ON PORT 3000?
+//TELL TWILIO TO GRAB INCOMING DATA FROM WEBHOOK
+//FEED DATA FROM TWILIO TO VISION
+//VISION SENDS BACK TO TWILIO --> TWILLIO TO WEBHOOK?
+
 import (
-<<<<<<< HEAD
 	"fmt"
-=======
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
-	"strings"
-	"time"
->>>>>>> f0f6397dadf85cd2ad6261aa4beab6c7b19c3d5f
 
 	"net/http"
 
@@ -24,42 +21,8 @@ import (
 const (
 	path = "/webhooks"
 )
-<<<<<<< HEAD
-=======
 
-func twilChat() {
->>>>>>> f0f6397dadf85cd2ad6261aa4beab6c7b19c3d5f
-
-func main() {
-
-<<<<<<< HEAD
-
-	hook, _ := github.New(github.Options.Secret("MyGitHubSuperSecretSecrect...?"))
-
-	http.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
-		payload, err := hook.Parse(r, github.ReleaseEvent, github.PullRequestEvent)
-		if err != nil {
-			if err == github.ErrEventNotFound {
-				// ok event wasn;t one of the ones asked to be parsed
-			}
-		}
-		switch payload.(type) {
-
-		case github.ReleasePayload:
-			release := payload.(github.ReleasePayload)
-			// Do whatever you want from here...
-			fmt.Printf("%+v", release)
-
-		case github.PullRequestPayload:
-			pullRequest := payload.(github.PullRequestPayload)
-			// Do whatever you want from here...
-			fmt.Printf("%+v", pullRequest) 
-		}
-	})
-	http.ListenAndServe(":3000", nil)
-
-=======
-func analyzeImage(imageUrl string) {
+/* func analyzeImage(imageUrl string) {
 	// For example, subscriptionKey = "0123456789abcdef0123456789ABCDEF"
 	const subscriptionKey = "xxx"
 
@@ -111,7 +74,7 @@ func analyzeImage(imageUrl string) {
 	// Format and display the Json result
 	jsonFormatted, _ := json.MarshalIndent(f, "", "  ")
 	fmt.Println(string(jsonFormatted))
-}
+} */
 
 func main() {
 	hook, _ := github.New(github.Options.Secret("MyGitHubSuperSecretSecrect...?"))
@@ -129,7 +92,6 @@ func main() {
 			release := payload.(github.ReleasePayload)
 			// Do whatever you want from here...
 			fmt.Printf("%+v", release)
->>>>>>> f0f6397dadf85cd2ad6261aa4beab6c7b19c3d5f
 
 		case github.PullRequestPayload:
 			pullRequest := payload.(github.PullRequestPayload)
