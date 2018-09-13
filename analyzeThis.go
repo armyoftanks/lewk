@@ -77,6 +77,7 @@ const (
 } */
 
 func main() {
+
 	hook, _ := github.New(github.Options.Secret("MyGitHubSuperSecretSecrect...?"))
 
 	http.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
