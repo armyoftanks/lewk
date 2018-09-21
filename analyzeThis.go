@@ -11,15 +11,7 @@ package main
 //VISION SENDS BACK TO TWILIO --> TWILLIO TO WEBHOOK?
 
 import (
-	"fmt"
-
 	"net/http"
-
-	"gopkg.in/go-playground/webhooks.v5/github"
-)
-
-const (
-	path = "/webhooks"
 )
 
 /* func analyzeImage(imageUrl string) {
@@ -78,27 +70,5 @@ const (
 
 func main() {
 
-	hook, _ := github.New(github.Options.Secret("MyGitHubSuperSecretSecrect...?"))
-
-	http.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
-		payload, err := hook.Parse(r, github.ReleaseEvent, github.PullRequestEvent)
-		if err != nil {
-			if err == github.ErrEventNotFound {
-				// ok event wasn;t one of the ones asked to be parsed
-			}
-		}
-		switch payload.(type) {
-
-		case github.ReleasePayload:
-			release := payload.(github.ReleasePayload)
-			// Do whatever you want from here...
-			fmt.Printf("%+v", release)
-
-		case github.PullRequestPayload:
-			pullRequest := payload.(github.PullRequestPayload)
-			// Do whatever you want from here...
-			fmt.Printf("%+v", pullRequest)
-		}
-	})
-	http.ListenAndServe(":4567", nil)
+	http.ListenAndServe(":80", nil)
 }
