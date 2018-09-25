@@ -16,6 +16,14 @@ import (
 //TELL TWILIO TO GRAB INCOMING DATA FROM WEBHOOK
 //FEED DATA FROM TWILIO TO VISION
 //VISION SENDS BACK TO TWILIO --> TWILLIO TO WEBHOOK?
+type IncomingPhoneNumbers string
+type AccountSid string
+
+func getMessage() (string, error) {
+
+	r, err := http.NewRequest("POST", "https://api.twilio.com/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers")
+
+}
 
 func main() {
 	r := mux.NewRouter()
