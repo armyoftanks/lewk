@@ -1,7 +1,10 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -16,22 +19,45 @@ import (
 //TELL TWILIO TO GRAB INCOMING DATA FROM WEBHOOK
 //FEED DATA FROM TWILIO TO VISION
 //VISION SENDS BACK TO TWILIO --> TWILLIO TO WEBHOOK?
-type IncomingPhoneNumbers string
+
 type AccountSid string
+type AuthToken string
+
+type Message struct {
+	IncomingPhoneNumbers string `json:"IncomingPhoneNumbers"`
+	Body                 string `json:"MessageBody"`
+}
+
+type messageResponse struct {
+	Data []Message `json:"data"`
+}
 
 func getMessage() (string, error) {
 
-	r, err := http.NewRequest("POST", "https://api.twilio.com/2010-04-01/Accounts/{AccountSid}/IncomingPhoneNumbers")
+	r, err := http.NewRequest("GET", "https://"+AccountSid+":"+AuthToken+"@api.twilio.com/2010-04-01/Accounts/IncomingPhoneNumbers"+"/Messages.json", nil)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 
+	messageInfo, err = ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	var messageObj Message
+	json.Unmarshal(messageInfo, &messageObj)
+
+	return messageObj.Body, err
 }
 
 func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/lewk", func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
-		hello := vars["hellopost"]
+		messageBody := getMessage()
+		lewk := vars[messageBody]
 
-		fmt.Fprintf(w, "Hello %s\n", hello)
+		fmt.Println(w, lewk)
 	})
 
 	http.ListenAndServe(":4576", r)
