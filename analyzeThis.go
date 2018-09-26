@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -32,9 +33,9 @@ type messageResponse struct {
 	Data []Message `json:"data"`
 }
 
-func getMessage() (string, error) {
+func getMessage() (string, string, error) {
 
-	r, err := http.NewRequest("GET", "https://"+AccountSid+":"+AuthToken+"@api.twilio.com/2010-04-01/Accounts/IncomingPhoneNumbers"+"/Messages.json", nil)
+	r, err := http.NewRequest("POST", "https://"+AccountSid+":"+AuthToken+"@api.twilio.com/2010-04-01/Accounts/IncomingPhoneNumbers"+"/Messages.json", nil)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -44,8 +45,12 @@ func getMessage() (string, error) {
 		log.Fatal(err.Error())
 	}
 
-	var messageObj Message
+	var messageObj map[string]string
 	json.Unmarshal(messageInfo, &messageObj)
+
+	if len(messageObj["value"]) <= 0 {
+		return "", errors.New("Failed to parse")
+	}
 
 	return messageObj.Body, err
 }
