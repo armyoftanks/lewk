@@ -1,0 +1,86 @@
+package main
+
+import (
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+
+	"github.com/gorilla/mux"
+)
+
+// create twilio 2 way messenger
+// create a webhook
+// implement microsoft vision api
+// feed image data back into twilio through webhook
+
+//WEBHOOK LISTENING ON PORT 3000?
+//TELL TWILIO TO GRAB INCOMING DATA FROM WEBHOOK
+//FEED DATA FROM TWILIO TO VISION
+//VISION SENDS BACK TO TWILIO --> TWILLIO TO WEBHOOK?
+type appConfig struct {
+	AccountSid string
+	AuthToken  string
+}
+
+var globalConfig *appConfig = &appConfig{}
+
+// IF I GET A REQUEST FROM A USER THE INFO SHOULD UNMARSHAL INTO THIS STUFF BUT WHY AM I NOT IMPLEMENTING IT?
+type Message struct {
+	IncomingPhoneNumbers string `json:"IncomingPhoneNumbers"`
+	Body                 string `json:"MessageBody"`
+}
+
+type messageResponse struct {
+	Data []Message `json:"data"`
+}
+
+func getMessage() (string, error) {
+
+	r, err := http.NewRequest("POST", "https://"+globalConfig.AccountSid+":"+globalConfig.AuthToken+"@api.twilio.com/2010-04-01/Accounts/IncomingPhoneNumbers"+"/Messages.json", nil)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	fmt.Println(r, err)
+
+	messageInfo, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	fmt.Println(messageInfo, err)
+
+	var messageObj map[string]string
+	json.Unmarshal(messageInfo, &messageObj)
+
+	if len(messageObj["value"]) <= 0 {
+		return "", errors.New("Failed to parse")
+	}
+
+	fmt.Println((messageObj["value"]))
+
+	return messageObj["value"], nil
+}
+
+func main() {
+
+	globalConfig.AccountSid = "XXXX"
+	globalConfig.AuthToken = "XXXX"
+
+	r := mux.NewRouter()
+	r.HandleFunc("/lewk", func(w http.ResponseWriter, r *http.Request) {
+		//vars := mux.Vars(r)
+
+		// I KNOW THE BELOW IS SHIT, I HAVE TO PUT MY FUNCTION INTO AN INTERFACE?
+
+		//messageBody:= getMessage()
+		//lewk := vars[messageBody]
+
+		//fmt.Println(w, lewk)
+	})
+
+	http.ListenAndServe(":4576", r)
+}
