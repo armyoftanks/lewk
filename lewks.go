@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -37,7 +36,7 @@ type messageResponse struct {
 	Data []Message `json:"data"`
 }
 
-func getMessage() (string, error) {
+func getMessage() string {
 
 	r, err := http.NewRequest("POST", "https://"+globalConfig.AccountSid+":"+globalConfig.AuthToken+"@api.twilio.com/2010-04-01/Accounts/IncomingPhoneNumbers"+"/Messages.json", nil)
 	if err != nil {
@@ -57,29 +56,29 @@ func getMessage() (string, error) {
 	json.Unmarshal(messageInfo, &messageObj)
 
 	if len(messageObj["value"]) <= 0 {
-		return "", errors.New("Failed to parse")
+		log.Fatal(err.Error())
 	}
 
 	fmt.Println((messageObj["value"]))
 
-	return messageObj["value"], nil
+	return messageObj["value"]
 }
 
 func main() {
 
-	globalConfig.AccountSid = "XXXX"
-	globalConfig.AuthToken = "XXXX"
+	globalConfig.AccountSid = "x"
+	globalConfig.AuthToken = "x"
 
 	r := mux.NewRouter()
 	r.HandleFunc("/lewk", func(w http.ResponseWriter, r *http.Request) {
-		//vars := mux.Vars(r)
+		vars := mux.Vars(r)
 
 		// I KNOW THE BELOW IS SHIT, I HAVE TO PUT MY FUNCTION INTO AN INTERFACE?
 
-		//messageBody:= getMessage()
-		//lewk := vars[messageBody]
+		messageBody := getMessage()
+		lewk := vars[messageBody]
 
-		//fmt.Println(w, lewk)
+		fmt.Println(w, lewk)
 	})
 
 	http.ListenAndServe(":4576", r)
