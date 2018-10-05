@@ -22,6 +22,7 @@ import (
 type appConfig struct {
 	AccountSid string
 	AuthToken  string
+	SID        string
 }
 
 var globalConfig *appConfig = &appConfig{}
@@ -38,7 +39,10 @@ type messageResponse struct {
 
 func getMessage() string {
 
-	r, err := http.NewRequest("POST", "https://"+globalConfig.AccountSid+":"+globalConfig.AuthToken+"@api.twilio.com/2010-04-01/Accounts/IncomingPhoneNumbers"+"/Messages.json", nil)
+	r, err := http.NewRequest("POST", "https://api.twilio.com/2010-04-01/Accounts/"+globalConfig.AccountSid+"/IncomingPhoneNumbers/"+globalConfig.SID+"/Messages.json", nil)
+	r.Header.Add(url, "https://5fa5dfbe.ngrok.io/lewk")
+	r.Header.Add(globalConfig.AuthToken)
+
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -66,8 +70,9 @@ func getMessage() string {
 
 func main() {
 
-	globalConfig.AccountSid = "x"
-	globalConfig.AuthToken = "x"
+	globalConfig.AccountSid = "AC3177c21a5f4f4e0e51e94ebf3c88aab5"
+	globalConfig.SID = "PN7c8899985a228c15f04aa948dd813534"
+	globalConfig.AuthToken = "62a97b94f682320fb5f1b4ea497e19ca"
 
 	r := mux.NewRouter()
 	r.HandleFunc("/lewk", func(w http.ResponseWriter, r *http.Request) {
