@@ -70,9 +70,9 @@ func getMessage() string {
 
 func main() {
 
-	globalConfig.AccountSid = "AC3177c21a5f4f4e0e51e94ebf3c88aab5"
-	globalConfig.SID = "PN7c8899985a228c15f04aa948dd813534"
-	globalConfig.AuthToken = "62a97b94f682320fb5f1b4ea497e19ca"
+	globalConfig.AccountSid = "x"
+	globalConfig.SID = "x"
+	globalConfig.AuthToken = "x"
 
 	r := mux.NewRouter()
 	r.HandleFunc("/lewk", func(w http.ResponseWriter, r *http.Request) {
