@@ -27,7 +27,7 @@ type appConfig struct {
 
 var globalConfig *appConfig = &appConfig{}
 
-// IF I GET A REQUEST FROM A USER THE INFO SHOULD UNMARSHAL INTO THIS STUFF BUT WHY AM I NOT IMPLEMENTING IT?
+// IF I GET A REQUEST FROM A USER THE INFO SHOULD UNMARSHAL INTO THIS STUFF BUT I DONT KNOW HOW?
 type Message struct {
 	IncomingPhoneNumbers string `json:"IncomingPhoneNumbers"`
 	Body                 string `json:"MessageBody"`
